@@ -61,6 +61,7 @@ class MumbleSettingsController extends Controller
     }
 
     public function postConfiguration() {
+        $request = request();
         setting(['winterco.mumble-connector.credentials.ice_endpoint_ip', $request->input('mumble-configuration-endpoint-ip')], true);
         setting(['winterco.mumble-connector.credentials.ice_endpoint_port', $request->input('mumble-configuration-endpoint-port')], true);
         setting(['winterco.mumble-connector.credentials.ice_key', $request->input('mumble-configuration-key')], true);

@@ -33,19 +33,39 @@ class MumbleController extends Controller
 {
 
     public function join() {
+        $server_address = setting('winterco.mumble_connector.credentials.server_addr', true);
+        if (is_null($server_address)) {
+            return redirect()->route('mumble-connector.history')->with('error', 'Plugin is not fully configured. Please contact administrator.');
+        }
         $group_id = auth()->user()->group->id;
         $mumble_user = MumbleUser::findOrNew($group_id);
+        if (is_null($mumble_user->group_id)) $mumble_user->group_id = $group_id;
         if (is_null($mumble_user->password)) {
             $mumble_user->password = Helper::randomString(32);
             $mumble_user->save();
         }
         $groups = Helper::allowedRoles($mumble_user);
         if (sizeof($groups) == 0) {
-            return redirect()->back('error', 'You are not allowed to join. Please contact administrator.');
+            return redirect()->route('mumble-connector.history')->with('error', 'You are not allowed to join. Please contact administrator.');
         }
-        $server_address = setting('winterco.mumble_connector.credentials.server_addr', true);
         $server_url = 'mumble://'.$group_id.':'.urlencode($mumble_user->password).'@'.$server_address.'/?version=1.2.0';
         return redirect($server_url);
+    }
+
+    public function getCredentials() {
+        $server_address = setting('winterco.mumble_connector.credentials.server_addr', true);
+        $group_id = auth()->user()->group->id;
+        $mumble_user = MumbleUser::findOrNew($group_id);
+        if (is_null($mumble_user->group_id)) $mumble_user->group_id = $group_id;
+        if (is_null($mumble_user->password)) {
+            $mumble_user->password = Helper::randomString(32);
+            $mumble_user->save();
+        }
+        return [
+            'server_addr' => $server_address ?: '127.0.0.1:64738',
+            'username' => $group_id,
+            'password' => $mumble_user->password,
+        ];
     }
 
     public function getHistory() {
@@ -62,10 +82,11 @@ class MumbleController extends Controller
     public function resetPassword() {
         $group_id = auth()->user()->group->id;
         $mumble_user = MumbleUser::findOrNew($group_id);
+        if (is_null($mumble_user->group_id)) $mumble_user->group_id = $group_id;
         $mumble_user->password = Helper::randomString(32);
         $mumble_user->save();
         Helper::kickUser($group_id);
-        return redirect()->back('success', 'Password reset succeeded.');
+        return ['ok' => true];
     }
 
 

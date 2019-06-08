@@ -30,11 +30,11 @@ use Seat\Web\Models\Group;
 use WinterCo\Connector\Mumble\Helpers\Helper;
 use WinterCo\Connector\Mumble\Http\Validation\AddRelation;
 use WinterCo\Connector\Mumble\Http\Validation\MumbleUserShowModal;
+use WinterCo\Connector\Mumble\Models\MumbleUser;
 use WinterCo\Connector\Mumble\Models\MumbleLoginHistory;
 use WinterCo\Connector\Mumble\Models\MumbleRole;
 use WinterCo\Connector\Mumble\Models\MumbleRoleAlliance;
 use WinterCo\Connector\Mumble\Models\MumbleRoleCorporation;
-use WinterCo\Connector\Mumble\Models\MumbleRolePublic;
 use WinterCo\Connector\Mumble\Models\MumbleRoleRole;
 use WinterCo\Connector\Mumble\Models\MumbleRoleTitle;
 use WinterCo\Connector\Mumble\Models\MumbleRoleGroup;
@@ -111,7 +111,6 @@ class MumbleJsonController extends Controller
      */
     public function getRelations()
     {
-        $mumble_role_filters = MumbleRolePublic::all();
         $group_filters = MumbleRoleGroup::all();
         $role_filters = MumbleRoleRole::all();
         $corporation_filters = MumbleRoleCorporation::all();
@@ -125,31 +124,13 @@ class MumbleJsonController extends Controller
         // $mumble_roles = MumbleRole::orderBy('name')->get();
 
         return view('mumble-connector::access.list',
-            compact('mumble_role_filters', 'group_filters', 'role_filters', 'corporation_filters',
+            compact('group_filters', 'role_filters', 'corporation_filters',
                 'title_filters', 'alliance_filters'/* , 'groups' */, 'roles'/* , 'corporations', 'alliances', 'mumble_roles' */));
     }
 
     //
     // Remove access
     //
-
-    /**
-     * @param $mumble_role
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function getRemovePublic($mumble_role)
-    {
-        $channel_public = MumbleRolePublic::where('mumble_role', $mumble_role);
-
-        if ($channel_public != null) {
-            $channel_public->delete();
-            return redirect()->back()
-                ->with('success', 'The public Mumble relation has been removed');
-        }
-
-        return redirect()->back()
-            ->with('error', 'An error occurs while trying to remove the public Mumble relation.');
-    }
 
     /**
      * @param $group_id
@@ -266,7 +247,7 @@ class MumbleJsonController extends Controller
         $mumble_user->password = Helper::randomString(32);
         $mumble_user->save();
         Helper::kickUser($group_id);
-        return ['ok' => true]
+        return ['ok' => true];
     }
 
     //
@@ -289,8 +270,6 @@ class MumbleJsonController extends Controller
         // use a single post route in order to create any kind of relation
         // value are user, role, corporation or alliance
         switch ($request->input('mumble-type')) {
-            case 'public':
-                return $this->postPublicRelation($mumble_role);
             case 'group':
                 return $this->postGroupRelation($mumble_role, $group_id);
             case 'role':
@@ -310,26 +289,6 @@ class MumbleJsonController extends Controller
     //
     // Helper methods
     //
-
-    /**
-     * @param $mumble_role
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private function postPublicRelation($mumble_role)
-    {
-        if (MumbleRolePublic::find($mumble_role) == null) {
-            MumbleRolePublic::create([
-                'mumble_role' => $mumble_role,
-                'enabled' => true
-            ]);
-
-            return redirect()->back()
-                ->with('success', 'New public Mumble relation has been created');
-        }
-
-        return redirect()->back()
-            ->with('error', 'This relation already exists');
-    }
 
     /**
      * @param $mumble_role

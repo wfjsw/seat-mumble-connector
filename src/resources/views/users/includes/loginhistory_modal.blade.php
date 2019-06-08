@@ -1,5 +1,5 @@
 <div class="modal fade" id="user-history" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width: 900px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">
@@ -29,9 +29,6 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                </div>
-                <div class="overlay">
-                    <i class="fa fa-refresh fa-spin"></i>
                 </div>
             </div>
             <div class="modal-footer">

@@ -77,13 +77,13 @@ class Helper
         if (! Helper::isEnabledAccount($mumble_user->group))
             return $channels;
 
-        $enabled_character_ids = Helper::getEnabledKey($qq_user->group->users);
+        $enabled_character_ids = Helper::getEnabledKey($mumble_user->group->users);
         
         if (empty($enabled_character_ids))
             return $channels;
 
         $strict_mode = setting('winterco.mumble-connector.strict', true);
-        $all_token_valid = sizeof($enabled_character_ids) == $qq_user->group->users->count();
+        $all_token_valid = sizeof($enabled_character_ids) == $mumble_user->group->users->count();
         if ($strict_mode && ! $all_token_valid) 
             return $channels;
 
@@ -176,7 +176,8 @@ class Helper
     }
 
     public static function kickUser(int $group_id) {
-        Redis::publish('winterco.mumble-connector.kick', $group_id);
+        // Redis::publish('winterco.mumble-connector.kick', $group_id);
+        app('mumble')->kickUser($group_id);
         return;
     }
 }

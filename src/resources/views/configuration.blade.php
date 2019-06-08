@@ -9,7 +9,7 @@
             <h3 class="panel-title">Configuration</h3>
         </div>
         <div class="panel-body">
-            <form role="form" action="{{ route('mumble-connector.oauth.configuration.post') }}" method="post" class="form-horizontal">
+            <form role="form" action="{{ route('mumble-connector.configuration.post') }}" method="post" class="form-horizontal">
                 {{ csrf_field() }}
 
                 <div class="box-body">
@@ -25,7 +25,7 @@
                                        name="mumble-configuration-endpoint-ip" />
                                 @else
                                 <input type="text" class="form-control " id="mumble-configuration-endpoint-ip"
-                                       name="mumble-configuration-endpoint-ip" value="{{ setting('winterco.mumble-connector.credentials.ice_endpoint_ip', true) }}" readonly />
+                                       name="mumble-configuration-endpoint-ip" value="{{ setting('winterco.mumble-connector.credentials.ice_endpoint_ip', true) }}" />
                                 @endif
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                                        name="mumble-configuration-endpoint-port" />
                                 @else
                                 <input type="text" class="form-control " id="mumble-configuration-endpoint-port"
-                                       name="mumble-configuration-endpoint-port" value="{{ setting('winterco.mumble-connector.credentials.ice_endpoint_port', true) }}" readonly />
+                                       name="mumble-configuration-endpoint-port" value="{{ setting('winterco.mumble-connector.credentials.ice_endpoint_port', true) }}" />
                                 @endif
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                                        name="mumble-configuration-server" />
                                 @else
                                 <input type="text" class="form-control " id="mumble-configuration-server"
-                                       name="mumble-configuration-server" value="{{ setting('winterco.mumble-connector.credentials.server_addr', true) }}" readonly />
+                                       name="mumble-configuration-server" value="{{ setting('winterco.mumble-connector.credentials.server_addr', true) }}" />
                                 @endif
                             </div>
                         </div>

@@ -72,9 +72,7 @@ class CreateMumbleTables extends Migration
             $table->string('osversion')->nullable();
             $table->timestamps();
 
-            $table->primary('id', 'mumble_loginhistory_primary');
-
-            $table->foreign('group_id', 'mumble_users_group_id_foreign')
+            $table->foreign('group_id', 'mumble_login_history_group_id_foreign')
                 ->references('id')
                 ->on('groups')
                 ->onDelete('cascade');

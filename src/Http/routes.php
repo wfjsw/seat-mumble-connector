@@ -36,6 +36,26 @@ Route::group([
 ], function() {
 
     Route::group([
+        'middleware' => ['api.auth'],
+        'prefix' => 'api'
+    ], function () {
+        Route::post('/authenticate', [
+            'as' => 'mumble-connector.api.authenticate',
+            'uses' => 'MumbleAPIConnector@authenticate',
+        ]);
+
+        Route::post('/login', [
+            'as' => 'mumble-connector.api.login',
+            'uses' => 'MumbleAPIConnector@recordLogin',
+        ]);
+
+        Route::post('/logout', [
+            'as' => 'mumble-connector.api.logout',
+            'uses' => 'MumbleAPIConnector@recordLogout',
+        ]);
+    });
+
+    Route::group([
         'middleware' => ['web', 'auth', 'locale'],
     ], function() {
 
@@ -46,6 +66,11 @@ Route::group([
             Route::get('/server/join', [
                 'as' => 'mumble-connector.server.join',
                 'uses' => 'MumbleController@join',
+            ]);
+
+            Route::post('/server/credentials', [
+                'as' => 'mumble-connector.server.getcredentials',
+                'uses' => 'MumbleController@getCredentials',
             ]);
 
             Route::get('/history', [
@@ -77,7 +102,7 @@ Route::group([
 
 
             Route::post('/configuration', [
-                'as' => 'mumble-connector.oauth.configuration.post',
+                'as' => 'mumble-connector.configuration.post',
                 'uses' => 'MumbleSettingsController@postConfiguration',
             ]);
 

@@ -11,15 +11,15 @@
     </div>
 
     <div class="row margin-bottom">
-        <div class="col-md-offset-8 col-md-4">
+        <div class="col-md-12">
             <div class="pull-right">
-                <button type="button" class="btn btn-info" id="retrieve-account">
-                    {{ trans('mumble-connector::seat.retrieve_account') }}
-                </button>
-                <button type="button" class="btn btn-danger" id="reset-password">
-                    <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
-                    {{ trans('mumble-connector::seat.reset_password') }}
-                </button>
+                    <button type="button" class="btn btn-info" id="retrieve-account">
+                        {{ trans('mumble-connector::seat.retrieve_account') }}
+                    </button>
+                    <button type="button" class="btn btn-danger" id="reset-password">
+                        <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+                        {{ trans('mumble-connector::seat.reset_password') }}
+                    </button>
             </div>
         </div>
     </div>
@@ -46,11 +46,17 @@
             </table>
         </div>
     </div>
+    @include('mumble-connector::includes.credentials')
 
 @endsection
 
+@push('head')
+<link rel="stylesheet" type="text/css" href="{{ asset('web/css/wt-mumble-hook.css') }}" />
+@endpush
+
 @push('javascript')
     <script type="text/javascript">
+        var logincredentials_modal = $('#user-credentials');
         $('#history').dataTable({
             processing: true,
             serverSide: true,
@@ -73,18 +79,30 @@
             order: [
                 [0, 'desc']
             ]
+        });
 
-            $.on('click', 'button.btn-danger', function(){
-                var data = table.row($(this).parents('tr')).data();
-                if (!window.confirm('{{ trans('mumble-connector::seat.password_reset_confirm') }}'))
-                $.ajax({
-                    url: '{{ route('mumble-connector.reset') }}',
-                    method: 'POST',
-                    data: {'id' : row.group_id},
-                    success: function(data){
-                        window.alert('{{ trans('mumble-connector::seat.password_reset_complete')  }}')
-                    }
-                });
+        $('button.btn-info').on('click', function() {
+            $.ajax({
+                url: '{{ route('mumble-connector.server.getcredentials') }}',
+                method: 'POST',
+                success: function(data){
+                    logincredentials_modal.find('#server-ip').val(data.server_addr.split(':')[0] || '');
+                    logincredentials_modal.find('#server-port').val(data.server_addr.split(':')[1] || '64738');
+                    logincredentials_modal.find('#username').val(data.username);
+                    logincredentials_modal.find('#password').val(data.password);
+                    logincredentials_modal.modal('show');
+                }
+            });
+        });
+        
+        $('button.btn-danger').on('click', function(){
+            if (!window.confirm('{{ trans('mumble-connector::seat.password_reset_confirm') }}')) return;
+            $.ajax({
+                url: '{{ route('mumble-connector.reset') }}',
+                method: 'POST',
+                success: function(data){
+                    window.alert('{{ trans('mumble-connector::seat.password_reset_complete')  }}');
+                }
             });
         });
     </script>

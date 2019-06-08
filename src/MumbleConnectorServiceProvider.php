@@ -23,7 +23,7 @@ namespace WinterCo\Connector\Mumble;
 use RestCord\MumbleClient;
 use Seat\Services\AbstractSeatPlugin;
 use WinterCo\Connector\Mumble\Commands\MumbleLogsClear;
-use WinterCo\Connector\Mumble\Commands\MumbleRPCDaemon;
+use WinterCo\Connector\Mumble\Helpers\MumbleRpc;
 
 /**
  * Class MumbleConnectorServiceProvider
@@ -45,6 +45,7 @@ class MumbleConnectorServiceProvider extends AbstractSeatPlugin
         $this->addPublications();
         $this->addTranslations();
 
+        $this->addMumbleContainer();
         $this->configureApi();
     }
 
@@ -72,7 +73,6 @@ class MumbleConnectorServiceProvider extends AbstractSeatPlugin
     {
         $this->commands([
         	MumbleLogsClear::class,
-	        MumbleRPCDaemon::class,
         ]);
     }
 
@@ -118,6 +118,20 @@ class MumbleConnectorServiceProvider extends AbstractSeatPlugin
         $this->publishes([
             __DIR__ . '/resources/assets/css/' => public_path('web/css'),
         ]);
+    }
+
+    private function addMumbleContainer()
+    {
+        // push ice client into container as singleton if token has been set
+        $bot_token = setting('winterco.mumble-connector.credentials.ice_endpoint_ip', true);
+
+        if (! is_null($bot_token)) {
+            $this->app->singleton('mumble', function () {
+                return new MumbleRpc();
+            });
+        }
+
+        $this->app->alias('mumble', MumbleRpc::class);
     }
 
     private function configureApi()

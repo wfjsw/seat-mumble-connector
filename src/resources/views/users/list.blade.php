@@ -112,7 +112,7 @@
                     searchDelay: 1000,
                     pageLength: 50,
                     ajax: {
-                        url: "{{ route('mumble-connector.json.users.history') }}",
+                        url: "{{ route('mumble-connector.json.user.history') }}",
                         data: {id: row.group_id}
                     },
                     columns: [
@@ -130,7 +130,7 @@
                         [0, 'desc']
                     ]
                 });
-
+                loginhistory_modal.modal('show');
             })
             .on('click', 'button.reset-pwd', function(){
                 var data = table.row($(this).parents('tr')).data();

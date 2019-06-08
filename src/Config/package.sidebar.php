@@ -33,9 +33,9 @@ return [
             ],
             [
                 'name'  => 'Login History',
-                'label' => 'mumble-connector::seat.history',
+                'label' => 'mumble-connector::seat.login_history',
                 'icon'  => 'fa-shield',
-                'route' => 'mumble-connector.server.history',
+                'route' => 'mumble-connector.history',
                 'permission' => 'mumble-connector.view',
             ],
             // [
