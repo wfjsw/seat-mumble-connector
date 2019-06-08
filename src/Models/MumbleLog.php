@@ -18,38 +18,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WinterCo\Connector\Mumble\Http\Validation;
+namespace WinterCo\Connector\Mumble\Models;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class AddRelation
- * @package WinterCo\Connector\Mumble\Http\Validation
+ * Class MumbleLog
+ * @package WinterCo\Connector\Mumble\Models
  */
-class AddRelation extends FormRequest
+class MumbleLog extends Model
 {
     /**
-     * @return bool
+     * @var string
      */
-    public function authorize()
-    {
-        return true;
-    }
+    protected $table = 'winterco_mumble_connector_logs';
 
     /**
-     * @return array
+     * @var array
      */
-    public function rules()
-    {
-        return [
-            'mumble-type'            => 'required|string',
-            'mumble-group-id'        => 'integer',
-            'mumble-role-id'         => 'string',
-            'mumble-corporation-id'  => 'string',
-            'mumble-title-id'        => 'string',
-            'mumble-alliance-id'     => 'string',
-            'mumble-mumble-role' => 'required|string',
-            'mumble-enabled'         => 'boolean'
-        ];
-    }
+    protected $fillable = [
+        'event', 'message',
+    ];
 }

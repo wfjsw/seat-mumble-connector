@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of discord-connector and provides user synchronization between both SeAT and a Discord Guild
+ * This file is part of mumble-connector and provides user synchronization between both SeAT and a Mumble Guild
  *
  * Copyright (C) 2016, 2017, 2018  Loïc Leuilliot <loic.leuilliot@gmail.com>
  *
@@ -18,21 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-Route::group([
-    'namespace' => 'Warlof\Seat\Connector\Discord\Http\Controllers\Api\v1',
-    'prefix' => 'api',
-    'middleware' => 'api.auth'
-], function() {
-    Route::group(['prefix' => 'v2'], function () {
-        Route::group(['prefix' => 'discord-connector'], function () {
-                Route::get('/mapping', 'DiscordApiController@getDiscordMappings');
-        });
-    });
-});
+// Route::group([
+//     'namespace' => 'WinterCo\Connector\Mumble\Http\Controllers\Api\v1',
+//     'prefix' => 'api',
+//     'middleware' => 'api.auth'
+// ], function() {
+//     Route::group(['prefix' => 'v2'], function () {
+//         Route::group(['prefix' => 'mumble-connector'], function () {
+//                 Route::get('/mapping', 'MumbleApiController@getMumbleMappings');
+//         });
+//     });
+// });
 
 Route::group([
-    'namespace' => 'Warlof\Seat\Connector\Discord\Http\Controllers',
-    'prefix' => 'discord-connector'
+    'namespace' => 'WinterCo\Connector\Mumble\Http\Controllers',
+    'prefix' => 'mumble-connector'
 ], function() {
 
     Route::group([
@@ -40,114 +40,107 @@ Route::group([
     ], function() {
 
         Route::group([
-            'middleware' => 'bouncer:discord-connector.view',
+            'middleware' => 'bouncer:mumble-connector.view',
         ], function () {
 
             Route::get('/server/join', [
-                'as' => 'discord-connector.server.join',
-                'uses' => 'Services\ServerController@join',
+                'as' => 'mumble-connector.server.join',
+                'uses' => 'MumbleController@join',
             ]);
 
-            Route::get('/server/callback', [
-                'as' => 'discord-connector.server.callback',
-                'uses' => 'Services\ServerController@callback',
+            Route::get('/history', [
+                'as' => 'mumble-connector.history',
+                'uses' => 'MumbleController@getHistory',
+            ]);
+
+            Route::post('/reset', [
+                'as' => 'mumble-connector.reset',
+                'uses' => 'MumbleController@resetPassword',
             ]);
 
         });
 
         // Endpoints with Configuration Permission
         Route::group([
-            'middleware' => 'bouncer:discord-connector.setup',
+            'middleware' => 'bouncer:mumble-connector.setup',
         ], function() {
 
             Route::get('/configuration', [
-                'as' => 'discord-connector.configuration',
-                'uses' => 'DiscordSettingsController@getConfiguration',
+                'as' => 'mumble-connector.configuration',
+                'uses' => 'MumbleSettingsController@getConfiguration',
             ]);
 
             Route::get('/run/{commandName}', [
-                'as' => 'discord-connector.command.run',
-                'uses' => 'DiscordSettingsController@getSubmitJob',
+                'as' => 'mumble-connector.command.run',
+                'uses' => 'MumbleSettingsController@getSubmitJob',
             ]);
 
-            // OAuth
-            Route::group([
-                'namespace' => 'Services',
-                'prefix' => 'oauth'
-            ], function() {
 
-                Route::post('/configuration', [
-                    'as' => 'discord-connector.oauth.configuration.post',
-                    'uses' => 'OAuthController@postConfiguration',
-                ]);
-
-                Route::get('/callback', [
-                    'as' => 'discord-connector.oauth.callback',
-                    'uses' => 'OAuthController@callback',
-                ]);
-
-            });
+            Route::post('/configuration', [
+                'as' => 'mumble-connector.oauth.configuration.post',
+                'uses' => 'MumbleSettingsController@postConfiguration',
+            ]);
 
         });
 
         Route::group([
-            'middleware' => 'bouncer:discord-connector.create',
+            'middleware' => 'bouncer:mumble-connector.create',
         ], function() {
 
-            Route::get('/public/{channel_id}/remove', [
-                'as' => 'discord-connector.public.remove',
-                'uses' => 'DiscordJsonController@getRemovePublic',
+            Route::get('/public/{mumble_role}/remove', [
+                'as' => 'mumble-connector.public.remove',
+                'uses' => 'MumbleJsonController@getRemovePublic',
             ]);
 
-            Route::get('/users/{group_id}/{channel_id}/remove', [
-                'as' => 'discord-connector.user.remove',
-                'uses' => 'DiscordJsonController@getRemoveUser',
+            Route::get('/users/{group_id}/{mumble_role}/remove', [
+                'as' => 'mumble-connector.user.remove',
+                'uses' => 'MumbleJsonController@getRemoveUser',
             ]);
 
-            Route::get('/roles/{role_id}/{channel_id}/remove', [
-                'as' => 'discord-connector.role.remove',
-                'uses' => 'DiscordJsonController@getRemoveRole',
+            Route::get('/roles/{role_id}/{mumble_role}/remove', [
+                'as' => 'mumble-connector.role.remove',
+                'uses' => 'MumbleJsonController@getRemoveRole',
             ]);
 
-            Route::get('/corporations/{corporation_id}/{channel_id}/remove', [
-                'as' => 'discord-connector.corporation.remove',
-                'uses' => 'DiscordJsonController@getRemoveCorporation',
+            Route::get('/corporations/{corporation_id}/{mumble_role}/remove', [
+                'as' => 'mumble-connector.corporation.remove',
+                'uses' => 'MumbleJsonController@getRemoveCorporation',
             ]);
 
-            Route::get('/corporation/{corporation_id}/{title_id}/{channel_id}/remove', [
-                'as' => 'discord-connector.title.remove',
-                'uses' => 'DiscordJsonController@getRemoveTitle',
+            Route::get('/corporation/{corporation_id}/{title_id}/{mumble_role}/remove', [
+                'as' => 'mumble-connector.title.remove',
+                'uses' => 'MumbleJsonController@getRemoveTitle',
             ]);
 
-            Route::get('/alliances/{alliance_id}/{channel_id}/remove', [
-                'as' => 'discord-connector.alliance.remove',
-                'uses' => 'DiscordJsonController@getRemoveAlliance',
+            Route::get('/alliances/{alliance_id}/{mumble_role}/remove', [
+                'as' => 'mumble-connector.alliance.remove',
+                'uses' => 'MumbleJsonController@getRemoveAlliance',
             ]);
 
             Route::post('/', [
-                'as' => 'discord-connector.add',
-                'uses' => 'DiscordJsonController@postRelation',
+                'as' => 'mumble-connector.add',
+                'uses' => 'MumbleJsonController@postRelation',
             ]);
 
         });
 
         Route::group([
-            'middleware' => 'bouncer:discord-connector.security',
+            'middleware' => 'bouncer:mumble-connector.security',
         ], function() {
 
             Route::get('/', [
-                'as' => 'discord-connector.list',
-                'uses' => 'DiscordJsonController@getRelations',
+                'as' => 'mumble-connector.list',
+                'uses' => 'MumbleJsonController@getRelations',
             ]);
 
             Route::get('/logs', [
-                'as' => 'discord-connector.logs',
-                'uses' => 'DiscordLogsController@getLogs',
+                'as' => 'mumble-connector.logs',
+                'uses' => 'MumbleLogsController@getLogs',
             ]);
 
             Route::get('/users', [
-                'as' => 'discord-connector.users',
-                'uses' => 'DiscordController@getUsers',
+                'as' => 'mumble-connector.users',
+                'uses' => 'MumbleController@getUsers',
             ]);
 
             Route::group([
@@ -155,32 +148,37 @@ Route::group([
             ], function () {
 
                 Route::get('/logs', [
-                    'as' => 'discord-connector.json.logs',
-                    'uses' => 'DiscordLogsController@getJsonLogData',
+                    'as' => 'mumble-connector.json.logs',
+                    'uses' => 'MumbleLogsController@getJsonLogData',
                 ]);
 
                 Route::get('/users', [
-                    'as' => 'discord-connector.json.users',
-                    'uses' => 'DiscordController@getUsersData',
+                    'as' => 'mumble-connector.json.users',
+                    'uses' => 'MumbleController@getUsersData',
                 ]);
 
-                Route::post('/user/remove', [
-                    'as' => 'discord-connector.json.user.remove',
-                    'uses' => 'DiscordController@postRemoveUserMapping',
+                Route::get('/users/groups', [
+                    'as' => 'mumble-connector.json.user.groups',
+                    'uses' => 'MumbleJsonController@getJsonUserRolesData',
                 ]);
 
-                Route::get('/users/channels', [
-                    'as' => 'discord-connector.json.user.roles',
-                    'uses' => 'DiscordJsonController@getJsonUserRolesData',
+                Route::get('/users/history', [
+                    'as' => 'mumble-connector.json.user.history',
+                    'uses' => 'MumbleJsonController@getUserLoginHistory',
+                ]);
+
+                Route::post('/users/reset', [
+                    'as' => 'mumble-connector.json.user.reset',
+                    'uses' => 'MumbleJsonController@resetPassword',
                 ]);
 
             });
         });
 
         Route::get('/titles', [
-            'as' => 'discord-connector.json.titles',
-            'uses' => 'DiscordJsonController@getJsonTitle',
-            'middleware' => 'bouncer:discord-connector.create',
+            'as' => 'mumble-connector.json.titles',
+            'uses' => 'MumbleJsonController@getJsonTitle',
+            'middleware' => 'bouncer:mumble-connector.create',
         ]);
 
     });

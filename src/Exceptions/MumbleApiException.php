@@ -18,38 +18,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WinterCo\Connector\Mumble\Http\Validation;
+namespace WinterCo\Connector\Mumble\Exceptions;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Exception;
 
 /**
- * Class AddRelation
- * @package WinterCo\Connector\Mumble\Http\Validation
+ * Class MumbleApiException
+ * @package WinterCo\Connector\Mumble\Exceptions
  */
-class AddRelation extends FormRequest
+class MumbleApiException extends Exception
 {
-    /**
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
 
-    /**
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-            'mumble-type'            => 'required|string',
-            'mumble-group-id'        => 'integer',
-            'mumble-role-id'         => 'string',
-            'mumble-corporation-id'  => 'string',
-            'mumble-title-id'        => 'string',
-            'mumble-alliance-id'     => 'string',
-            'mumble-mumble-role' => 'required|string',
-            'mumble-enabled'         => 'boolean'
-        ];
-    }
 }

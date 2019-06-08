@@ -18,38 +18,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WinterCo\Connector\Mumble\Http\Validation;
+namespace WinterCo\Connector\Mumble\Http\Controllers;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Seat\Web\Http\Controllers\Controller;
+use WinterCo\Connector\Mumble\Models\MumbleLog;
 
 /**
- * Class AddRelation
- * @package WinterCo\Connector\Mumble\Http\Validation
+ * Class MumbleLogsController
+ * @package WinterCo\Connector\Mumble\Http\Controllers
  */
-class AddRelation extends FormRequest
+class MumbleLogsController extends Controller
 {
     /**
-     * @return bool
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function authorize()
+    public function getLogs()
     {
-        return true;
+        $log_count = MumbleLog::count();
+        return view('mumble-connector::logs.list', compact('log_count'));
     }
 
     /**
-     * @return array
+     * @return mixed
      */
-    public function rules()
+    public function getJsonLogData()
     {
-        return [
-            'mumble-type'            => 'required|string',
-            'mumble-group-id'        => 'integer',
-            'mumble-role-id'         => 'string',
-            'mumble-corporation-id'  => 'string',
-            'mumble-title-id'        => 'string',
-            'mumble-alliance-id'     => 'string',
-            'mumble-mumble-role' => 'required|string',
-            'mumble-enabled'         => 'boolean'
-        ];
+        $logs = MumbleLog::orderBy('created_at', 'desc')->get();
+
+        return app('DataTables')::of($logs)
+            ->editColumn('created_at', function($row){
+                return view('mumble-connector::logs.partial.date', compact('row'));
+            })
+            ->rawColumns(['created_at'])
+            ->make(true);
     }
 }

@@ -1,40 +1,64 @@
-@extends('web::layouts.grids.4-4-4')
+@extends('web::layouts.grids.12')
 
 @section('title', trans('web::seat.configuration'))
 @section('page_header', trans('web::seat.configuration'))
 
-@section('left')
+@section('full')
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Configuration</h3>
         </div>
         <div class="panel-body">
-            <form role="form" action="{{ route('discord-connector.oauth.configuration.post') }}" method="post" class="form-horizontal">
+            <form role="form" action="{{ route('mumble-connector.oauth.configuration.post') }}" method="post" class="form-horizontal">
                 {{ csrf_field() }}
 
                 <div class="box-body">
 
-                    <legend>Discord API</legend>
-
-                    @if (! is_null(setting('warlof.discord-connector.credentials.client_id', true)))
-                    <p class="callout callout-warning text-justify">It appears you already have a Discord API access setup.
-                        In order to prevent any mistakes, <code>Client ID</code> and <code>Client Secret</code> fields have been disabled.
-                        Please use the rubber in order to enable modifications.</p>
-                    @endif
+                    <legend>Mumble ICE Interface</legend>
 
                     <div class="form-group">
-                        <label for="discord-configuration-client" class="col-md-4">Discord Client ID</label>
+                        <label for="mumble-configuration-endpoint-ip" class="col-md-4">ICE Endpoint IP</label>
                         <div class="col-md-7">
                             <div class="input-group input-group-sm">
-                                @if (setting('warlof.discord-connector.credentials.client_id', true) == null)
-                                <input type="text" class="form-control" id="discord-configuration-client"
-                                       name="discord-configuration-client" />
+                                @if (setting('winterco.mumble-connector.credentials.ice_endpoint_ip', true) == null)
+                                <input type="text" class="form-control" id="mumble-configuration-endpoint-ip"
+                                       name="mumble-configuration-endpoint-ip" />
                                 @else
-                                <input type="text" class="form-control " id="discord-configuration-client"
-                                       name="discord-configuration-client" value="{{ setting('warlof.discord-connector.credentials.client_id', true) }}" readonly />
+                                <input type="text" class="form-control " id="mumble-configuration-endpoint-ip"
+                                       name="mumble-configuration-endpoint-ip" value="{{ setting('winterco.mumble-connector.credentials.ice_endpoint_ip', true) }}" readonly />
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mumble-configuration-endpoint-port" class="col-md-4">ICE Endpoint Port</label>
+                        <div class="col-md-7">
+                            <div class="input-group input-group-sm">
+                                @if (setting('winterco.mumble-connector.credentials.ice_endpoint_port', true) == null)
+                                <input type="text" class="form-control" id="mumble-configuration-endpoint-port"
+                                       name="mumble-configuration-endpoint-port" />
+                                @else
+                                <input type="text" class="form-control " id="mumble-configuration-endpoint-port"
+                                       name="mumble-configuration-endpoint-port" value="{{ setting('winterco.mumble-connector.credentials.ice_endpoint_port', true) }}" readonly />
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mumble-configuration-key" class="col-md-4">Mumble ICE Key</label>
+                        <div class="col-md-7">
+                            <div class="input-group input-group-sm">
+                                @if (setting('winterco.mumble-connector.credentials.ice_key', true) == null)
+                                <input type="text" class="form-control" id="mumble-configuration-key"
+                                       name="mumble-configuration-key" />
+                                @else
+                                <input type="text" class="form-control" id="mumble-configuration-key"
+                                       name="mumble-configuration-key" value="{{ setting('winterco.mumble-connector.credentials.ice_key', true) }}" readonly />
                                 @endif
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-danger btn-flat" id="client-eraser">
+                                    <button type="button" class="btn btn-danger btn-flat" id="key-eraser">
                                         <i class="fa fa-eraser"></i>
                                     </button>
                                 </span>
@@ -43,47 +67,42 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="discord-configuration-secret" class="col-md-4">Discord Client Secret</label>
+                        <label for="mumble-configuration-server" class="col-md-4">Server Address</label>
                         <div class="col-md-7">
                             <div class="input-group input-group-sm">
-                                @if (setting('warlof.discord-connector.credentials.client_secret', true) == null)
-                                <input type="text" class="form-control" id="discord-configuration-secret"
-                                       name="discord-configuration-secret" />
+                                @if (setting('winterco.mumble-connector.credentials.server_addr', true) == null)
+                                <input type="text" class="form-control" id="mumble-configuration-server"
+                                       name="mumble-configuration-server" />
                                 @else
-                                <input type="text" class="form-control" id="discord-configuration-secret"
-                                       name="discord-configuration-secret" value="{{ setting('warlof.discord-connector.credentials.client_secret', true) }}" readonly />
+                                <input type="text" class="form-control " id="mumble-configuration-server"
+                                       name="mumble-configuration-server" value="{{ setting('winterco.mumble-connector.credentials.server_addr', true) }}" readonly />
                                 @endif
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-danger btn-flat" id="secret-eraser">
-                                        <i class="fa fa-eraser"></i>
-                                    </button>
-                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <legend>Options</legend>
+
+                    <div class="form-group">
+                        <label for="mumble-configuration-ticker" class="col-md-4">Display Ticker</label>
+                        <div class="col-md-7">
+                            <div class="input-group input-group-sm">
+                                <input type="checkbox" id="mumble-configuration-ticker"
+                                       name="mumble-configuration-ticker" @if(setting('winterco.mumble-connector.ticker', true)) checked="checked" @endif />
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="discord-configuration-bot" class="col-md-4">Discord Bot Token</label>
+                        <label for="mumble-configuration-nick-format" class="col-md-4">Nickname Format</label>
                         <div class="col-md-7">
                             <div class="input-group input-group-sm">
-                                @if (setting('warlof.discord-connector.credentials.bot_token', true) == null)
-                                    <input type="text" class="form-control" id="discord-configuration-bot"
-                                           name="discord-configuration-bot" />
-                                @else
-                                    <input type="text" class="form-control" id="discord-configuration-bot"
-                                           name="discord-configuration-bot" value="{{ setting('warlof.discord-connector.credentials.bot_token', true) }}" readonly />
-                                @endif
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-danger btn-flat" id="bot-eraser">
-                                        <i class="fa fa-eraser"></i>
-                                    </button>
-                                </span>
+                                <input type="input" id="mumble-configuration-nick-format"
+                                       name="mumble-configuration-nick-format" value="{{ setting('winterco.mumble-connector.nickfmt', true) ?: '[%s] %s' }}" />
                             </div>
-                            <span class="help-block text-justify">
-                                In order to generate credentials, please go on <a href="https://discordapp.com/developers/applications/me" target="_blank">your Discord apps</a> and create a new app.
-                            </span>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="box-footer">
@@ -95,85 +114,12 @@
     </div>
 @stop
 
-@section('center')
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Commands</h3>
-        </div>
-        <div class="panel-body">
-            <div class="form-group">
-                <div class="col-md-12">
-                    @if(setting('warlof.discord-connector.credentials.token', true) == '')
-                        <a href="#" type="button" class="btn btn-success btn-md col-md-12 disabled" role="button">Update Discord roles</a>
-                    @else
-                        <a href="{{ route('discord-connector.command.run', ['commandName' => 'discord:role:sync']) }}" type="button" class="btn btn-success btn-md col-md-12" role="button">Update Discord roles</a>
-                    @endif
-                    <span class="help-block">
-                        This will update known roles from Discord.
-                    </span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-12">
-                    @if(setting('warlof.discord-connector.credentials.token', true) == '')
-                        <a href="#" type="button" class="btn btn-danger btn-md col-md-12 disabled" role="button">Reset everybody</a>
-                    @else
-                        <a href="{{ route('discord-connector.command.run', ['commandName' => 'discord:user:terminator']) }}" type="button" class="btn btn-danger btn-md col-md-12" role="button">Reset everybody</a>
-                    @endif
-                    <span class="help-block">
-                        This will remove roles from every members into the connected Discord Guild. Please proceed carefully.
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-@stop
-
-@section('right')
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title"><i class="fa fa-rss"></i> Update feed</h3>
-        </div>
-        <div class="panel-body" style="height: 500px; overflow-y: scroll">
-            {!! $changelog !!}
-        </div>
-        <div class="panel-footer">
-            <div class="row">
-                <div class="col-md-6">
-                    Installed version: <b>{{ config('discord-connector.config.version') }}</b>
-                </div>
-                <div class="col-md-6">
-                    Latest version:
-                    <a href="https://packagist.org/packages/warlof/seat-discord-connector">
-                        <img src="https://poser.pugx.org/warlof/seat-discord-connector/v/stable" alt="Discord Connector Version" />
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-@stop
-
 @push('javascript')
     <script type="application/javascript">
-        $('#client-eraser').on('click', function(){
-            var discord_client = $('#discord-configuration-client');
-            discord_client.val('');
-            discord_client.removeAttr("readonly");
+        $('#key-eraser').on('click', function(){
+            var mumble_secret = $('#mumble-configuration-secret');
+            mumble_secret.val('');
+            mumble_secret.removeAttr("readonly");
         });
-
-        $('#secret-eraser').on('click', function(){
-            var discord_secret = $('#discord-configuration-secret');
-            discord_secret.val('');
-            discord_secret.removeAttr("readonly");
-        });
-
-        $('#bot-eraser').on('click', function(){
-            var discord_secret = $('#discord-configuration-bot');
-            discord_secret.val('');
-            discord_secret.removeAttr("readonly");
-        });
-
-        $('[data-toggle="tooltip"]').tooltip();
     </script>
 @endpush

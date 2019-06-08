@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of discord-connector and provides user synchronization between both SeAT and a Discord Guild
+ * This file is part of mumble-connector and provides user synchronization between both SeAT and a Mumble Guild
  *
  * Copyright (C) 2016, 2017, 2018  Loïc Leuilliot <loic.leuilliot@gmail.com>
  *
@@ -19,48 +19,62 @@
  */
 
 return [
-    'discord-connector' => [
-        'name'          => 'Discord',
+    'mumble-connector' => [
+        'name'          => 'Mumble',
         'icon'          => 'fa-plug',
-        'route_segment' => 'discord-connector',
+        'route_segment' => 'mumble-connector',
         'entries' => [
             [
-                'name'  => 'Connect',
-                'label' => 'discord-connector::seat.join',
+                'name'  => 'Join Server',
+                'label' => 'mumble-connector::seat.join',
                 'icon'  => 'fa-sign-in',
-                'route' => 'discord-connector.server.join',
-                'permission' => 'discord-connector.view',
+                'route' => 'mumble-connector.server.join',
+                'permission' => 'mumble-connector.view',
             ],
+            [
+                'name'  => 'Login History',
+                'label' => 'mumble-connector::seat.history',
+                'icon'  => 'fa-shield',
+                'route' => 'mumble-connector.server.history',
+                'permission' => 'mumble-connector.view',
+            ],
+            // [
+            //     'name'  => 'Temporary Access',
+            //     'label' => 'mumble-connector::seat.temp_tokens',
+            //     'icon'  => 'fa-key',
+            //     'route' => 'mumble-connector.temptokens',
+            //     'permission' => 'mumble-connector.security'
+            // ],
             [
                 'name'  => 'Access Management',
                 'label' => 'web::seat.access',
                 'icon'  => 'fa-shield',
-                'route' => 'discord-connector.list',
-                'permission' => 'discord-connector.security'
+                'route' => 'mumble-connector.list',
+                'permission' => 'mumble-connector.security'
             ],
             [
                 'name'  => 'User Mapping',
-                'label' => 'discord-connector::seat.user_mapping',
+                'label' => 'mumble-connector::seat.user_mapping',
                 'icon'  => 'fa-exchange',
-                'route' => 'discord-connector.users',
-                'permission' => 'discord-connector.security'
+                'route' => 'mumble-connector.users',
+                'permission' => 'mumble-connector.security'
             ],
             [
                 'name'       => 'Settings',
                 'label'      => 'web::seat.configuration',
                 'icon'       => 'fa-cogs',
-                'route'      => 'discord-connector.configuration',
-                'permission' => 'discord-connector.setup'
+                'route'      => 'mumble-connector.configuration',
+                'permission' => 'mumble-connector.setup'
             ],
             [
                 'name'   => 'Logs',
                 'label'  => 'web::seat.log',
                 'plural' => true,
                 'icon'   => 'fa-list',
-                'route'  => 'discord-connector.logs',
-                'permission' => 'discord-connector.security'
+                'route'  => 'mumble-connector.logs',
+                'permission' => 'mumble-connector.security'
             ],
         ],
-        'permission' => 'discord-connector.view'
+        'permission' => 'mumble-connector.view'
     ],
 ];

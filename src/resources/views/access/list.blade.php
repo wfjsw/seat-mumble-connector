@@ -5,56 +5,83 @@
 
 @section('left')
 
-    @include('discord-connector::access.includes.mapping-creation')
+    @include('mumble-connector::access.includes.mapping-creation')
     
 @stop
 
 @section('right')
 
-    @include('discord-connector::access.includes.mapping-table')
+    @include('mumble-connector::access.includes.mapping-table')
 
 @stop
 
 @push('javascript')
     <script type="application/javascript">
         function getCorporationTitle() {
-            $('#discord-title-id').empty();
+            $('#mumble-title-id').empty();
 
-            $.ajax('{{ route('discord-connector.json.titles') }}', {
+            $.ajax('{{ route('mumble-connector.json.titles') }}', {
                 data: {
-                    corporation_id: $('#discord-corporation-id').val()
+                    corporation_id: $('#mumble-corporation-id').val()
                 },
                 dataType: 'json',
                 method: 'GET',
                 success: function(data){
                     for (var i = 0; i < data.length; i++) {
-                        $('#discord-title-id').append($('<option></option>').attr('value', data[i].title_id).text(data[i].name));
+                        $('#mumble-title-id').append($('<option></option>').attr('value', data[i].title_id).text(data[i].name));
                     }
                 }
             });
         }
 
-        $('#discord-type').change(function(){
-            $.each(['discord-group-id', 'discord-role-id', 'discord-corporation-id', 'discord-title-id', 'discord-alliance-id'], function(key, value){
-                if (value === ('discord-' + $('#discord-type').val() + '-id')) {
+        $('#mumble-type').change(function(){
+            $.each(['mumble-group-id', 'mumble-role-id', 'mumble-corporation-id', 'mumble-title-id', 'mumble-alliance-id'], function(key, value){
+                if (value === ('mumble-' + $('#mumble-type').val() + '-id')) {
                     $(('#' + value)).prop('disabled', false);
                 } else {
                     $(('#' + value)).prop('disabled', true);
                 }
             });
 
-            if ($('#discord-type').val() === 'title') {
-                $('#discord-corporation-id, #discord-title-id').prop('disabled', false);
+            if ($('#mumble-type').val() === 'title') {
+                $('#mumble-corporation-id, #mumble-title-id').prop('disabled', false);
             }
         }).select2();
 
-        $('#discord-corporation-id').change(function(){
+        $('#mumble-corporation-id').change(function(){
             getCorporationTitle();
         });
 
-        $('#discord-group-id, #discord-role-id, #discord-corporation-id, #discord-title-id, #discord-alliance-id, #discord-discord-role-id').select2();
+        $('#mumble-role-id').select2();
 
-        $('#discord-tabs').find('a').click(function(e){
+        $('#mumble-group-id').select2({
+            ajax: {
+                url: "{{ route('fastlookup.groups') }}",
+                dataType: 'json',
+                cache: true,
+            },
+            minimumInputLength: 3
+        })
+
+        $('#mumble-corporation-id').select2({
+            ajax: {
+                url: "{{ route('fastlookup.corporations') }}",
+                dataType: 'json',
+                cache: true,
+            },
+            minimumInputLength: 3
+        })
+
+        $('#mumble-alliance-id').select2({
+            ajax: {
+                url: "{{ route('fastlookup.alliances') }}",
+                dataType: 'json',
+                cache: true,
+            },
+            minimumInputLength: 3
+        })
+
+        $('#mumble-tabs').find('a').click(function(e){
             e.preventDefault();
             $(this).tab('show');
         });

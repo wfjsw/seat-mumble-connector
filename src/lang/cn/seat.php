@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of discord-connector and provides user synchronization between both SeAT and a Discord Guild
+ * This file is part of mumble-connector and provides user synchronization between both SeAT and a Mumble Guild
  *
  * Copyright (C) 2016, 2017, 2018  Loïc Leuilliot <loic.leuilliot@gmail.com>
  *
@@ -28,6 +28,6 @@ return [
     'title_filter' => '按游戏内头衔',
     'alliance_filter' => '按联盟',
     'public_filter' => '所有人',
-    'discord_role' => 'Discord 角色',
-    'join'      => '加入 Discord 服务器',
+    'mumble_role' => 'Mumble 角色',
+    'join'      => '加入 Mumble 服务器',
 ];

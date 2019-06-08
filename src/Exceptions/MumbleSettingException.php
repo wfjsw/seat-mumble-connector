@@ -18,38 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WinterCo\Connector\Mumble\Http\Validation;
+namespace WinterCo\Connector\Mumble\Exceptions;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Exception;
 
 /**
- * Class AddRelation
- * @package WinterCo\Connector\Mumble\Http\Validation
+ * Class MumbleSettingException
+ * @package WinterCo\Connector\Mumble\Exceptions
  */
-class AddRelation extends FormRequest
+class MumbleSettingException extends Exception
 {
     /**
-     * @return bool
+     * MumbleSettingException constructor.
      */
-    public function authorize()
+    public function __construct()
     {
-        return true;
-    }
-
-    /**
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-            'mumble-type'            => 'required|string',
-            'mumble-group-id'        => 'integer',
-            'mumble-role-id'         => 'string',
-            'mumble-corporation-id'  => 'string',
-            'mumble-title-id'        => 'string',
-            'mumble-alliance-id'     => 'string',
-            'mumble-mumble-role' => 'required|string',
-            'mumble-enabled'         => 'boolean'
-        ];
+        parent::__construct('Mumble connector has not been set yet. Missing either ICE server or key.');
     }
 }

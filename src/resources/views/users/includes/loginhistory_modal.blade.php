@@ -1,4 +1,4 @@
-<div class="modal fade" id="user-groups" tabindex="-1" role="dialog">
+<div class="modal fade" id="user-history" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -6,16 +6,24 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title">
-                    <span id="seat_username"></span> is member of following
+                    <span id="seat_username"></span> Login History
                 </h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <table class="table table-condensed table-hover" id="groups">
+                        <table class="table table-condensed table-hover table-responsive" id="history">
                             <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>#</th>
+                                <th>Session ID</th>
+                                <th>IP Address</th>
+                                <th>Login Time</th>
+                                <th>Logout Time</th>
+                                <th>Version</th>
+                                <th>Release</th>
+                                <th>OS</th>
+                                <th>OS Version</th>
                             </tr>
                             </thead>
                             <tbody></tbody>

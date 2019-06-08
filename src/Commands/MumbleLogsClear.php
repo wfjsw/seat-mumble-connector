@@ -18,38 +18,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WinterCo\Connector\Mumble\Http\Validation;
+namespace WinterCo\Connector\Mumble\Commands;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Console\Command;
+use WinterCo\Connector\Mumble\Models\MumbleLog;
 
 /**
- * Class AddRelation
- * @package WinterCo\Connector\Mumble\Http\Validation
+ * Class MumbleLogsClear
+ * @package WinterCo\Connector\Mumble\Commands
  */
-class AddRelation extends FormRequest
+class MumbleLogsClear extends Command
 {
     /**
-     * @return bool
+     * @var string
      */
-    public function authorize()
+    protected $signature = 'mumble:logs:clear';
+
+    /**
+     * @var string
+     */
+    protected $description = 'Clearing Mumble logs';
+
+    /**
+     * MumbleLogsClear constructor.
+     */
+    public function __construct()
     {
-        return true;
+        parent::__construct();
     }
 
     /**
-     * @return array
+     * Execute the console command.
      */
-    public function rules()
+    public function handle()
     {
-        return [
-            'mumble-type'            => 'required|string',
-            'mumble-group-id'        => 'integer',
-            'mumble-role-id'         => 'string',
-            'mumble-corporation-id'  => 'string',
-            'mumble-title-id'        => 'string',
-            'mumble-alliance-id'     => 'string',
-            'mumble-mumble-role' => 'required|string',
-            'mumble-enabled'         => 'boolean'
-        ];
+        MumbleLog::truncate();
     }
 }

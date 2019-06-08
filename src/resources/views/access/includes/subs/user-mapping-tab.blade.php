@@ -2,7 +2,7 @@
     <thead>
     <tr>
         <th>{{ trans('web::seat.username') }}</th>
-        <th>{{ trans('discord-connector::seat.discord_role') }}</th>
+        <th>{{ trans('mumble-connector::seat.mumble_role') }}</th>
         <th>{{ trans('web::seat.created') }}</th>
         <th>{{ trans('web::seat.updated') }}</th>
         <th>{{ trans('web::seat.status') }}</th>
@@ -13,7 +13,7 @@
     @foreach($group_filters as $filter)
         <tr>
             <td>{{ optional($filter->group->main_character)->name ?: 'Unknown Character' }}</td>
-            <td>{{ $filter->discord_role->name }}</td>
+            <td>{{ $filter->mumble_role }}</td>
             <td>{{ $filter->created_at }}</td>
             <td>{{ $filter->updated_at }}</td>
             <td>
@@ -25,7 +25,7 @@
             </td>
             <td>
                 <div class="btn-group">
-                    <a href="{{ route('discord-connector.user.remove', ['group_id' => $filter->group_id, 'discord_role_id' => $filter->discord_role_id]) }}" type="button" class="btn btn-danger btn-xs col-xs-12">
+                    <a href="{{ route('mumble-connector.user.remove', ['group_id' => $filter->group_id, 'mumble_role' => $filter->mumble_role]) }}" type="button" class="btn btn-danger btn-xs col-xs-12">
                         {{ trans('web::seat.remove') }}
                     </a>
                 </div>

@@ -1,48 +1,42 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">{{ trans_choice('discord-connector::seat.authorization', 2) }}</h3>
+        <h3 class="panel-title">{{ trans_choice('mumble-connector::seat.authorization', 2) }}</h3>
     </div>
     <div class="panel-body">
 
-        <ul class="nav nav-pills" id="discord-tabs" role="tablist">
+        <ul class="nav nav-pills" id="mumble-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#discord-public" role="tab" data-toggle="tab">{{ trans('discord-connector::seat.public_filter') }}</a>
+                <a href="#mumble-username" role="tab" data-toggle="tab">{{ trans('mumble-connector::seat.user_filter') }}</a>
             </li>
             <li role="presentation">
-                <a href="#discord-username" role="tab" data-toggle="tab">{{ trans('discord-connector::seat.user_filter') }}</a>
+                <a href="#mumble-role" role="tab" data-toggle="tab">{{ trans('mumble-connector::seat.role_filter') }}</a>
             </li>
             <li role="presentation">
-                <a href="#discord-role" role="tab" data-toggle="tab">{{ trans('discord-connector::seat.role_filter') }}</a>
+                <a href="#mumble-corporation" role="tab" data-toggle="tab">{{ trans('mumble-connector::seat.corporation_filter') }}</a>
             </li>
             <li role="presentation">
-                <a href="#discord-corporation" role="tab" data-toggle="tab">{{ trans('discord-connector::seat.corporation_filter') }}</a>
+                <a href="#mumble-title" role="tab" data-toggle="tab">{{ trans('mumble-connector::seat.title_filter') }}</a>
             </li>
             <li role="presentation">
-                <a href="#discord-title" role="tab" data-toggle="tab">{{ trans('discord-connector::seat.title_filter') }}</a>
-            </li>
-            <li role="presentation">
-                <a href="#discord-alliance" role="tab" data-toggle="tab">{{ trans('discord-connector::seat.alliance_filter') }}</a>
+                <a href="#mumble-alliance" role="tab" data-toggle="tab">{{ trans('mumble-connector::seat.alliance_filter') }}</a>
             </li>
         </ul>
 
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane fade in active" id="discord-public">
-                @include('discord-connector::access.includes.subs.public-mapping-tab')
+            <div role="tabpanel" class="tab-pane fade in active" id="mumble-username">
+                @include('mumble-connector::access.includes.subs.user-mapping-tab')
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="discord-username">
-                @include('discord-connector::access.includes.subs.user-mapping-tab')
+            <div role="tabpanel" class="tab-pane fade" id="mumble-role">
+                @include('mumble-connector::access.includes.subs.role-mapping-tab')
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="discord-role">
-                @include('discord-connector::access.includes.subs.role-mapping-tab')
+            <div role="tabpanel" class="tab-pane fade" id="mumble-corporation">
+                @include('mumble-connector::access.includes.subs.corporation-mapping-tab')
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="discord-corporation">
-                @include('discord-connector::access.includes.subs.corporation-mapping-tab')
+            <div role="tabpanel" class="tab-pane fade" id="mumble-title">
+                @include('mumble-connector::access.includes.subs.title-mapping-tab')
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="discord-title">
-                @include('discord-connector::access.includes.subs.title-mapping-tab')
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="discord-alliance">
-                @include('discord-connector::access.includes.subs.alliance-mapping-tab')
+            <div role="tabpanel" class="tab-pane fade" id="mumble-alliance">
+                @include('mumble-connector::access.includes.subs.alliance-mapping-tab')
             </div>
         </div>
     </div>

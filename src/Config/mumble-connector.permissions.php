@@ -18,38 +18,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WinterCo\Connector\Mumble\Http\Validation;
-
-use Illuminate\Foundation\Http\FormRequest;
-
-/**
- * Class AddRelation
- * @package WinterCo\Connector\Mumble\Http\Validation
- */
-class AddRelation extends FormRequest
-{
-    /**
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-            'mumble-type'            => 'required|string',
-            'mumble-group-id'        => 'integer',
-            'mumble-role-id'         => 'string',
-            'mumble-corporation-id'  => 'string',
-            'mumble-title-id'        => 'string',
-            'mumble-alliance-id'     => 'string',
-            'mumble-mumble-role' => 'required|string',
-            'mumble-enabled'         => 'boolean'
-        ];
-    }
-}
+return [
+    'mumble-connector' => [
+        'view',
+        'create',
+        'security',
+        'setup',
+    ],
+];

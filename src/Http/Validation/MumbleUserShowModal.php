@@ -23,10 +23,10 @@ namespace WinterCo\Connector\Mumble\Http\Validation;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class AddRelation
+ * Class MumbleUserShowModal
  * @package WinterCo\Connector\Mumble\Http\Validation
  */
-class AddRelation extends FormRequest
+class MumbleUserShowModal extends FormRequest
 {
     /**
      * @return bool
@@ -42,14 +42,7 @@ class AddRelation extends FormRequest
     public function rules()
     {
         return [
-            'mumble-type'            => 'required|string',
-            'mumble-group-id'        => 'integer',
-            'mumble-role-id'         => 'string',
-            'mumble-corporation-id'  => 'string',
-            'mumble-title-id'        => 'string',
-            'mumble-alliance-id'     => 'string',
-            'mumble-mumble-role' => 'required|string',
-            'mumble-enabled'         => 'boolean'
+            'id' => 'required|string'
         ];
     }
 }

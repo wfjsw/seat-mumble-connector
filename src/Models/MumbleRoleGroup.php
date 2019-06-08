@@ -18,38 +18,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WinterCo\Connector\Mumble\Http\Validation;
+namespace WinterCo\Connector\Mumble\Models;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Database\Eloquent\Model;
+use Seat\Eveapi\Traits\HasCompositePrimaryKey;
+use Seat\Web\Models\Group;
 
 /**
- * Class AddRelation
- * @package WinterCo\Connector\Mumble\Http\Validation
+ * Class MumbleRoleGroup
+ * @package WinterCo\Connector\Mumble\Models
  */
-class AddRelation extends FormRequest
+class MumbleRoleGroup extends Model
 {
-    /**
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
+
+    use HasCompositePrimaryKey;
 
     /**
-     * @return array
+     * @var string
      */
-    public function rules()
+    protected $table = 'winterco_mumble_connector_role_groups';
+
+    /**
+     * @var array
+     */
+    protected $primaryKey = [
+        'group_id', 'mumble_role',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        'group_id', 'mumble_role', 'enabled',
+    ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function group()
     {
-        return [
-            'mumble-type'            => 'required|string',
-            'mumble-group-id'        => 'integer',
-            'mumble-role-id'         => 'string',
-            'mumble-corporation-id'  => 'string',
-            'mumble-title-id'        => 'string',
-            'mumble-alliance-id'     => 'string',
-            'mumble-mumble-role' => 'required|string',
-            'mumble-enabled'         => 'boolean'
-        ];
+        return $this->belongsTo(Group::class, 'group_id', 'id');
     }
 }

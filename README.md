@@ -1,35 +1,35 @@
-# Seat Discord Connector
-A [SeAT](https://github.com/eveseat/seat) plugin which maintain user access on a Discord Guild based on defined pattern.
+# Seat Mumble Connector
+A [SeAT](https://github.com/eveseat/seat) plugin which maintain user access on a Mumble Guild based on defined pattern.
 
-[![Latest Unstable Version](https://poser.pugx.org/warlof/seat-discord-connector/v/unstable)](https://packagist.org/packages/warlof/seat-discord-connector)
-[![Latest Stable Version](https://poser.pugx.org/warlof/seat-discord-connector/v/stable)](https://packagist.org/packages/warlof/seat-discord-connector)
-[![Maintainability](https://api.codeclimate.com/v1/badges/04e249a4704e895a08fa/maintainability)](https://codeclimate.com/github/warlof/seat-discord-connector/maintainability)
-[![License](https://img.shields.io/badge/license-GPLv3-blue.svg?style=flat-square)](https://raw.githubusercontent.com/warlof/seat-discord-connector/master/LICENSE)
+[![Latest Unstable Version](https://poser.pugx.org/warlof/seat-mumble-connector/v/unstable)](https://packagist.org/packages/warlof/seat-mumble-connector)
+[![Latest Stable Version](https://poser.pugx.org/warlof/seat-mumble-connector/v/stable)](https://packagist.org/packages/warlof/seat-mumble-connector)
+[![Maintainability](https://api.codeclimate.com/v1/badges/04e249a4704e895a08fa/maintainability)](https://codeclimate.com/github/warlof/seat-mumble-connector/maintainability)
+[![License](https://img.shields.io/badge/license-GPLv3-blue.svg?style=flat-square)](https://raw.githubusercontent.com/warlof/seat-mumble-connector/master/LICENSE)
 
 # Setup
 
 ## Create Application
- - Go to the [following url](https://discordapp.com/developers/applications/me/create) in order to create an application and retrieve bot token.
+ - Go to the [following url](https://mumbleapp.com/developers/applications/me/create) in order to create an application and retrieve bot token.
  - Give it a name and suitable description; so user will be able to know what it is related to later.
  - Click on the `Add Redirect` button twice and seed spawned field with the address bellow :
-   - {seat-public-url}/discord-connector/oauth/callback
-   - {seat-public-url}/discord-connector/server/callback
+   - {seat-public-url}/mumble-connector/oauth/callback
+   - {seat-public-url}/mumble-connector/server/callback
  - Once done, click on the `Create app` at the bottom of the form
 
 > **NOTE**
 >
 > For example, if you have SeAT available on `seat.example.com`, the callbacks will be
->  - `https://seat.example.com/discord-connector/oauth/callback`
->  - `https://seat.example.com/discord-connector/server/callback`
+>  - `https://seat.example.com/mumble-connector/oauth/callback`
+>  - `https://seat.example.com/mumble-connector/server/callback`
 >
 > But, if you're accessing SeAT using `example.com/seat`, the callbacks will become
->  - `https://example.com/seat/discord-connector/oauth/callback`
->  - `https://example.com/seat/discord-connector/server/callback`
+>  - `https://example.com/seat/mumble-connector/oauth/callback`
+>  - `https://example.com/seat/mumble-connector/server/callback`
 
 ## Retrieving Credentials
 Once your application has been created, we will need to retrieve credentials which will be used later in order to setup the connector into SeAT.
 
-Go on the [following url](https://discordapp.com/developers/applications/me) and click on the box which is matching to the previously created application.
+Go on the [following url](https://mumbleapp.com/developers/applications/me) and click on the box which is matching to the previously created application.
 
 Take a note of the following information available in the upper top section :
 - `Client ID` which is a displayed number
@@ -39,10 +39,10 @@ Go at the footer section called `Bot` and check `Require OAuth2 access code` the
 Finally, retrieve the bot token by clicking on the `Click here to reveal` link.
 
 ## Install Package
-Since SeAT 3.0 - it's become super easy to install package. Just require `warlof/seat-discord-connector`, publish vendor and run migrations scripts :)
+Since SeAT 3.0 - it's become super easy to install package. Just require `warlof/seat-mumble-connector`, publish vendor and run migrations scripts :)
 
-- Firstly, run the following command `composer require warlof/seat-discord-connector`
-- Then, publish vendors `php artisan vendor:publish --force` (this will show you a prompt - input the number related to the following line `Warlof\Seat\Connector\Discord\DiscordConnectorServiceProvider`)
+- Firstly, run the following command `composer require warlof/seat-mumble-connector`
+- Then, publish vendors `php artisan vendor:publish --force` (this will show you a prompt - input the number related to the following line `WinterCo\Connector\Mumble\MumbleConnectorServiceProvider`)
 - Finally, run migrations scripts with `php artisan migrate`
 
 Don't forget to restart `supervisor` with `service supervisor restart` ;)
@@ -53,26 +53,26 @@ Don't forget to restart `supervisor` with `service supervisor restart` ;)
 > They need to be run at root SeAT directory which used to be `/var/www/seat`
 
 ## Setup Package
-Authenticate yourself using admin user on your SeAT instance. If all upper statements have been executed properly, you'll seed a new section into the sidebar called `Discord Connector`.
+Authenticate yourself using admin user on your SeAT instance. If all upper statements have been executed properly, you'll seed a new section into the sidebar called `Mumble Connector`.
 
 Open it, then go into `Settings` and fill the form using collected information at the beginning of this Walkthrough.
 
 
-Confirm using the `Update` button which will redirect you to Discord SSO.
+Confirm using the `Update` button which will redirect you to Mumble SSO.
 
 In the list, select the server where the SeAT Bot have to be install, leave permissions as it and click on `Authorize` button.
 
-![discord setup](./docs/img/connector-setup.png)
+![mumble setup](./docs/img/connector-setup.png)
 
-*My apologies for all that french stuff, but Discord SSO is using browser settings to show content. Despite of the language, content should be similar in all countries.*
+*My apologies for all that french stuff, but Mumble SSO is using browser settings to show content. Despite of the language, content should be similar in all countries.*
 
-Once you've been redirected back to SeAT, you can hit the `Update Discord Roles` green button which will seed SeAT with Roles available on Discord.
+Once you've been redirected back to SeAT, you can hit the `Update Mumble Roles` green button which will seed SeAT with Roles available on Mumble.
 
 ## Setup Access
-To build the mapping between SeAT and Discord, go into `Discord Connector > Access Management`.
-In case you're seeing no roles in the form, go into `Discord Connector > Settings` and hit the `Update Discord Roles` button.
+To build the mapping between SeAT and Mumble, go into `Mumble Connector > Access Management`.
+In case you're seeing no roles in the form, go into `Mumble Connector > Settings` and hit the `Update Mumble Roles` button.
 
-In **Discord Connector**, there are 6 kind of mapping called `Filter`. Their scope are explained in the table bellow.
+In **Mumble Connector**, there are 6 kind of mapping called `Filter`. Their scope are explained in the table bellow.
 
 | Filter | Description |
 | ------ | ----------- |
@@ -88,17 +88,17 @@ At all time, you're able to check which filter are set in the table available on
 
 # Linking Account and Getting Invitation
 
-As user, you will see a section called `Discord Connector` on the sidebar. Open it and click on `Join Server`.
+As user, you will see a section called `Mumble Connector` on the sidebar. Open it and click on `Join Server`.
 
-This will redirect your to Discord SSO with a simple form informing you that the bot will be able to collect basic information (like your Discord Unique ID and Nickname), and granted to invite you on the attached Discord Server.
+This will redirect your to Mumble SSO with a simple form informing you that the bot will be able to collect basic information (like your Mumble Unique ID and Nickname), and granted to invite you on the attached Mumble Server.
 
 Simply confirm using the `Authorize` button which will redirect you to the SeAT homepage with a green confirmation box.
 
-![discord link](./docs/img/connector-join.png)
+![mumble link](./docs/img/connector-join.png)
 
-*My apologies for all that french stuff, but Discord SSO is using browser settings to show content. Despite of the language, content should be similar in all countries.*
+*My apologies for all that french stuff, but Mumble SSO is using browser settings to show content. Despite of the language, content should be similar in all countries.*
 
-You'll be invited automatically to the Discord Server and attached channels.
+You'll be invited automatically to the Mumble Server and attached channels.
 
 # Known issues
 
@@ -107,4 +107,4 @@ Purpose is to assist you in troubleshooting and lead to a resolution path.
 
 | Problem | Solution |
 |---------|----------|
-| My job `MemberOrchestrator` is failing with the message `Client error: PATCH https://discordapp.com/api/v6/guilds/302770933452636161/members/353886200135942144 resulted in a 403 FORBIDDEN` | Ensure the bot role is at top level of your roles list (use drag and drop to sort them) |
+| My job `MemberOrchestrator` is failing with the message `Client error: PATCH https://mumbleapp.com/api/v6/guilds/302770933452636161/members/353886200135942144 resulted in a 403 FORBIDDEN` | Ensure the bot role is at top level of your roles list (use drag and drop to sort them) |

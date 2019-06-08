@@ -9,7 +9,7 @@
             <h3 class="panel-title">Information</h3>
         </div>
         <div class="panel-body">
-            <p>This section display Discord related event.
+            <p>This section display Mumble related event.
                 You will for example find which user and when it has been kicked or invited to a channel.</p>
             <p>It will display settings issue as well like if people didn't change their mail address.</p>
         </div>
@@ -55,7 +55,7 @@
                 <a href="#" type="button" class="btn btn-danger btn-sm pull-right disabled" role="button">
                     Clear</a>
             @else
-                <a href="{{ route('discord-connector.command.run', ['command_name' => 'discord:logs:clear']) }}" type="button"
+                <a href="{{ route('mumble-connector.command.run', ['command_name' => 'mumble:logs:clear']) }}" type="button"
                    class="btn btn-danger btn-sm pull-right" role="button">Clear</a>
             @endif
         </div>
@@ -68,7 +68,7 @@
         $('table#logs-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('discord-connector.json.logs') }}',
+            ajax: '{{ route('mumble-connector.json.logs') }}',
             columns: [
                 {data: 'created_at'},
                 {data: 'event', render: function(data){
