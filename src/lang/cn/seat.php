@@ -35,7 +35,7 @@ return [
     'reset_password' => '重置密码',
     'password_reset_confirm' => '您确定要重置密码吗？',
     'password_reset_complete' => '密码已成功重置。',
-    'account_and_credentials' => '登录凭据',
+    'accounts_and_credentials' => '登录凭据',
     'server_ip' => '服务器 IP 地址',
     'server_port' => '服务器端口',
     'username' => '用户名',

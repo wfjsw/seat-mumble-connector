@@ -41,17 +41,17 @@ Route::group([
     ], function () {
         Route::post('/authenticate', [
             'as' => 'mumble-connector.api.authenticate',
-            'uses' => 'MumbleAPIConnector@authenticate',
+            'uses' => 'MumbleAPIController@authenticate',
         ]);
 
         Route::post('/login', [
             'as' => 'mumble-connector.api.login',
-            'uses' => 'MumbleAPIConnector@recordLogin',
+            'uses' => 'MumbleAPIController@recordLogin',
         ]);
 
         Route::post('/logout', [
             'as' => 'mumble-connector.api.logout',
-            'uses' => 'MumbleAPIConnector@recordLogout',
+            'uses' => 'MumbleAPIController@recordLogout',
         ]);
     });
 

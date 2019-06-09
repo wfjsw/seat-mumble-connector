@@ -33,7 +33,7 @@ class MumbleController extends Controller
 {
 
     public function join() {
-        $server_address = setting('winterco.mumble_connector.credentials.server_addr', true);
+        $server_address = setting('winterco.mumble-connector.credentials.server_addr', true);
         if (is_null($server_address)) {
             return redirect()->route('mumble-connector.history')->with('error', 'Plugin is not fully configured. Please contact administrator.');
         }
@@ -53,7 +53,7 @@ class MumbleController extends Controller
     }
 
     public function getCredentials() {
-        $server_address = setting('winterco.mumble_connector.credentials.server_addr', true);
+        $server_address = setting('winterco.mumble-connector.credentials.server_addr', true);
         $group_id = auth()->user()->group->id;
         $mumble_user = MumbleUser::findOrNew($group_id);
         if (is_null($mumble_user->group_id)) $mumble_user->group_id = $group_id;

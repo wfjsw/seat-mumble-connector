@@ -5,7 +5,7 @@ namespace WinterCo\Connector\Mumble\Helpers;
 require_once 'Ice.php';
 require_once __DIR__.'/../../Murmur.php';
 
-use WinterCo\Connector\Mumble\Models\MumbleUserHistory;
+use WinterCo\Connector\Mumble\Models\MumbleLoginHistory;
 
 class MumbleRpc {
 
@@ -33,7 +33,7 @@ class MumbleRpc {
     }
 
     public function kickUser(int $group_id) {
-        $user_history = MumbleUserHistory::where('group_id', $group_id)->whereNull('logout_time')->first();
+        $user_history = MumbleLoginHistory::where('group_id', $group_id)->whereNull('logout_time')->first();
         if (is_null($user_history)) return;
         return $this->server->kickUser($user_history->session_id);
     }

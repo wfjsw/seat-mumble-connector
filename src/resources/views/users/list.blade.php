@@ -84,7 +84,7 @@
                             for (var i = 0; i < data.length; i++) {
                                 var role = data[i];
 
-                                $('#roles').find('tbody').append(
+                                $('#groups').find('tbody').append(
                                     '<tr><td>' +
                                     role +
                                     '</td></tr>');

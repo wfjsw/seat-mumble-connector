@@ -1,6 +1,6 @@
 <?php
 
-namespace WinterCo\Connector\Mumble\Http\Controller;
+namespace WinterCo\Connector\Mumble\Http\Controllers;
 
 use Seat\Web\Http\Controllers\Controller;
 use WinterCo\Connector\Mumble\Models\MumbleUser;
@@ -32,7 +32,7 @@ class MumbleAPIController extends Controller {
 
         $expected_nickname = Helper::buildNickname($mumble_user);
 
-        $groups = Helper::allowedGroups($mumble_user);
+        $groups = Helper::allowedRoles($mumble_user);
         
         return [
             'result' => $mumble_user->group_id,

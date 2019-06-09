@@ -23,6 +23,7 @@
 
 namespace WinterCo\Connector\Mumble\Helpers;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\CharacterInfo;
@@ -38,6 +39,9 @@ use Illuminate\Support\Facades\Redis;
  */
 class Helper
 {
+
+    public const NICKNAME_LENGTH_LIMIT = 64;
+
     /**
      * Return true if considered as active when both mail has been confirmed in case of mail activation,
      * and no adminis account is active
@@ -177,7 +181,7 @@ class Helper
 
     public static function kickUser(int $group_id) {
         // Redis::publish('winterco.mumble-connector.kick', $group_id);
-        app('mumble')->kickUser($group_id);
+        // app('mumble')->kickUser($group_id);
         return;
     }
 }

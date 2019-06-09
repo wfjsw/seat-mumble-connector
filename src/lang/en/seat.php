@@ -35,7 +35,7 @@ return [
     'reset_password' => 'Reset Password',
     'password_reset_confirm' => 'Are you sure to reset your password?',
     'password_reset_complete' => 'Password successfully reset.',
-    'account_and_credentials' => 'Credentials',
+    'accounts_and_credentials' => 'Credentials',
     'server_ip' => 'Server IP',
     'server_port' => 'Server Port',
     'username' => 'Username',

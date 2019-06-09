@@ -29,7 +29,7 @@
             <h3 class="panel-title">{{ trans_choice('mumble-connector::seat.login_history', 2) }}</h3>
         </div>
         <div class="panel-body">
-            <table class="table table-condensed table-hover table-responsive" id="users-table" data-page-length="25">
+            <table class="table table-condensed table-hover table-responsive" id="history" data-page-length="25">
                 <thead>
                     <tr>
                         <th>#</th>
