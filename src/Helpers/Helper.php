@@ -154,11 +154,15 @@ class Helper
         // init the discord nickname to the character name
         $expected_nickname = $mumble_user->group->main_character->name;
 
+        $user_nickname = \Seat\Services\Settings\Profile::get('nickname', $mumble_user->group->id);
+
+        $expected_nickname = is_null($user_nickname) ? $expected_nickname : $user_nickname . '/' . $expected_nickname;
+
         // in case ticker prefix is enabled, retrieve the corporation and prepend the ticker to the nickname
         if (setting('winterco.mumble-connector.ticker', true)) {
             $corporation = CorporationInfo::find($character->corporation_id);
             $nickfmt = setting('winterco.mumble-connector.nickfmt', true) ?: '[%s] %s';
-            $expected_nickname = sprintf($nickfmt, $corporation->ticker, $expected_nickname);
+            $expected_nickname = sprintf($nickfmt, $corporation ? $corporation->ticker : '????', $expected_nickname);
         }
 
         return Str::limit($expected_nickname, Helper::NICKNAME_LENGTH_LIMIT, '');

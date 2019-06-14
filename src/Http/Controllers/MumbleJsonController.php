@@ -74,7 +74,7 @@ class MumbleJsonController extends Controller
 
         // $roles = MumbleRole::whereIn('id', $guild_member->roles)->select('id', 'name')->get();
         
-        $group_id = auth()->user()->group->id;
+        $group_id = $request->input('id');
         $mumble_user = MumbleUser::findOrFail($group_id);
 
         $roles = Helper::allowedRoles($mumble_user);

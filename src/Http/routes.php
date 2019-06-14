@@ -53,6 +53,11 @@ Route::group([
             'as' => 'mumble-connector.api.logout',
             'uses' => 'MumbleAPIController@recordLogout',
         ]);
+
+        Route::post('/data', [
+            'as' => 'mumble-connector.api.data',
+            'uses' => 'MumbleAPIController@getAllUserData',
+        ]);
     });
 
     Route::group([

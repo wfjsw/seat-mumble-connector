@@ -9,20 +9,20 @@ import Murmur
 
 pswd = {}
 
-TOKEN = "SjG1IWcBk6LKwmRJliJJlnXguL3IUKEq"
+# TOKEN = "SjG1IWcBk6LKwmRJliJJlnXguL3IUKEq"
 
 def authenticate(groupid, password):
     file = "/mumble-connector/api/authenticate"
     headers = {
         "Content-type": "application/json",
         "Accept": "application/json",
-        "X-Token": TOKEN
+        # "X-Token": TOKEN
     }
     params = json.dumps({
         "name": groupid,
         "pw": password
     })
-    conn = httplib.HTTPSConnection("seat.eve-info.net")
+    conn = httplib.HTTPConnection("127.0.0.1", 18001)
     conn.request("POST", file, params, headers)
     response = conn.getresponse()
     if response.status != 200:
@@ -45,7 +45,7 @@ def recordLogin(sessionid, groupid, ip, version, release, os, osversion):
     headers = {
         "Content-type": "application/json",
         "Accept": "application/json",
-        "X-Token": TOKEN
+        # "X-Token": TOKEN
     }
     params = json.dumps({
         "session_id": sessionid,
@@ -57,7 +57,7 @@ def recordLogin(sessionid, groupid, ip, version, release, os, osversion):
         "os": os,
         "osversion": osversion
     })
-    conn = httplib.HTTPSConnection("seat.eve-info.net")
+    conn = httplib.HTTPConnection("127.0.0.1", 18001)
     conn.request("POST", file, params, headers)
     response = conn.getresponse()
     if response.status != 200:
@@ -73,14 +73,14 @@ def recordLogout(sessionid, groupid):
     headers = {
         "Content-type": "application/json",
         "Accept": "application/json",
-        "X-Token": TOKEN
+        # "X-Token": TOKEN
     }
     params = json.dumps({
         "session_id": sessionid,
         "group_id": groupid,
         "logout_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     })
-    conn = httplib.HTTPSConnection("seat.eve-info.net")
+    conn = httplib.HTTPConnection("127.0.0.1", 18001)
     conn.request("POST", file, params, headers)
     response = conn.getresponse()
     if response.status != 200:

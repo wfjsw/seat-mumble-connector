@@ -1,3 +1,4 @@
 .idea/
 vendor/
+authenticator-proxy/node_modules/
 composer.lock

@@ -23,7 +23,7 @@ class MumbleAPIController extends Controller {
         }
 
         if (is_null($mumble_user->password)) {
-            return ['result' => -3];
+            return ['result' => -1];
         }
 
         if ($mumble_user->password != $pw) {
@@ -33,6 +33,8 @@ class MumbleAPIController extends Controller {
         $expected_nickname = Helper::buildNickname($mumble_user);
 
         $groups = Helper::allowedRoles($mumble_user);
+
+        if (sizeof($groups) == 0) return ['result' => -1];
         
         return [
             'result' => $mumble_user->group_id,
@@ -70,8 +72,28 @@ class MumbleAPIController extends Controller {
         $group_id = request()->input('group_id');
         $logout_time = request()->input('logout_time');
         $login_history = MumbleLoginHistory::where('session_id', $session_id)->where('group_id', $group_id)->whereNull('logout_time')->first();
+        if (is_null($login_history)) return ['ok' => false];
         $login_history->logout_time = $logout_time;
         $login_history->save();
         return ['ok' => true];
+    }
+
+    public function getAllUserData() {
+        $user_data = array();
+        $mumble_users = MumbleUser::all();
+        foreach ($mumble_users as $mumble_user) {
+            try {
+                $groups = Helper::allowedRoles($mumble_user);
+                if (sizeof($groups) <= 0) continue;
+                $user_data[$mumble_user->group_id] = [
+                    'pw' => $mumble_user->password,
+                    'name' => Helper::buildNickname($mumble_user),
+                    'groups' => $groups,
+                ];
+            } catch (\Exception $e) {
+                report($e);
+            }
+        }
+        return $user_data;
     }
 }
