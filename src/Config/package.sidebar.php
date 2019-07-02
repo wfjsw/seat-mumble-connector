@@ -19,25 +19,19 @@
  */
 
 return [
-    'mumble-connector' => [
-        'name'          => 'Mumble',
-        'icon'          => 'fa-plug',
+    'mumble-connect' => [
+        'name'  => 'Mumble',
+        # 'label' => 'mumble-connector::seat.login_history',
+        'icon'  => 'fa-headphones',
         'route_segment' => 'mumble-connector',
+        'route' => 'mumble-connector.history',
+        # 'permission' => 'mumble-connector.view',
+    ],
+    'mumble-admin' => [
+        'name'          => 'Mumble Admin',
+        'icon'          => 'fa-shield',
+        'route_segment' => 'mumble-admin',
         'entries' => [
-            [
-                'name'  => 'Join Server',
-                'label' => 'mumble-connector::seat.join',
-                'icon'  => 'fa-sign-in',
-                'route' => 'mumble-connector.server.join',
-                'permission' => 'mumble-connector.view',
-            ],
-            [
-                'name'  => 'Login History',
-                'label' => 'mumble-connector::seat.login_history',
-                'icon'  => 'fa-shield',
-                'route' => 'mumble-connector.history',
-                'permission' => 'mumble-connector.view',
-            ],
             // [
             //     'name'  => 'Temporary Access',
             //     'label' => 'mumble-connector::seat.temp_tokens',
@@ -75,6 +69,6 @@ return [
                 'permission' => 'mumble-connector.security'
             ],
         ],
-        'permission' => 'mumble-connector.view'
+        'permission' => 'mumble-connector.security'
     ],
 ];
