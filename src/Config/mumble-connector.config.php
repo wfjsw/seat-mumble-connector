@@ -22,5 +22,5 @@
  * TODO: lazy coder, remember to edit this file before TAG ! DAMMIT !
  */
 return [
-    'version'   => '1.2.0'
+    'version'   => '1.2.1'
 ];

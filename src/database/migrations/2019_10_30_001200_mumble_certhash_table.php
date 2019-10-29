@@ -42,8 +42,6 @@ class MumbleCerthashTable extends Migration
             $table->string('certhash');
             $table->timestamps();
 
-            $table->primary('id', 'mumble_certhashes_primary');
-
             $table->foreign('group_id', 'mumble_certhashes_group_id_foreign')
                 ->references('id')
                 ->on('groups')
