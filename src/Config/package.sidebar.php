@@ -24,21 +24,14 @@ return [
         # 'label' => 'mumble-connector::seat.login_history',
         'icon'  => 'fa-headphones',
         'route_segment' => 'mumble-connector',
-        'route' => 'mumble-connector.history',
         # 'permission' => 'mumble-connector.view',
-    ],
-    'mumble-admin' => [
-        'name'          => 'Mumble Admin',
-        'icon'          => 'fa-shield',
-        'route_segment' => 'mumble-admin',
         'entries' => [
-            // [
-            //     'name'  => 'Temporary Access',
-            //     'label' => 'mumble-connector::seat.temp_tokens',
-            //     'icon'  => 'fa-key',
-            //     'route' => 'mumble-connector.temptokens',
-            //     'permission' => 'mumble-connector.security'
-            // ],
+            [
+                'name'  => 'Credentials',
+                'label' => 'web::seat.accounts_and_credentials',
+                'icon'  => 'fa-key',
+                'route' => 'mumble-connector.credentials',
+            ],
             [
                 'name'  => 'Access Management',
                 'label' => 'web::seat.access',
@@ -69,6 +62,5 @@ return [
                 'permission' => 'mumble-connector.security'
             ],
         ],
-        'permission' => 'mumble-connector.security'
     ],
 ];

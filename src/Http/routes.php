@@ -58,6 +58,11 @@ Route::group([
             'as' => 'mumble-connector.api.data',
             'uses' => 'MumbleAPIController@getAllUserData',
         ]);
+
+        Route::post('/postfp', [
+            'as' => 'mumble-connector.api.postfingerprint',
+            'uses' => 'MumbleAPIController@recordFingerprint',
+        ]);
     });
 
     Route::group([
@@ -78,9 +83,9 @@ Route::group([
                 'uses' => 'MumbleController@getCredentials',
             ]);
 
-            Route::get('/history', [
-                'as' => 'mumble-connector.history',
-                'uses' => 'MumbleController@getHistory',
+            Route::get('/credentials', [
+                'as' => 'mumble-connector.credentials',
+                'uses' => 'MumbleController@getCredentialPage',
             ]);
 
             Route::post('/reset', [

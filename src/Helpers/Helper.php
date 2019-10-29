@@ -31,6 +31,7 @@ use Seat\Eveapi\Models\Corporation\CorporationInfo;
 use Seat\Eveapi\Models\RefreshToken;
 use Seat\Web\Models\Group;
 use WinterCo\Connector\Mumble\Models\MumbleUser;
+// use WinterCo\Connector\Mumble\Models\
 use Illuminate\Support\Facades\Redis;
 
 /**
@@ -68,6 +69,75 @@ class Helper
         return RefreshToken::whereIn('character_id', $users->pluck('id')->toArray())->pluck('character_id')->toArray();
     }
 
+    public static function allRoles() : array {
+
+        $rows = Group::join('winterco_mumble_connector_role_groups', 'winterco_mumble_connector_role_groups.group_id', '=', 'groups.id')
+                    ->select('mumble_role')
+                    ->union(
+                        // fix model declaration calling the table directly
+                        DB::table('group_role')->join('winterco_mumble_connector_role_roles', 'winterco_mumble_connector_role_roles.role_id', '=',
+                                        'group_role.role_id')
+                                 ->select('mumble_role')
+                    )->union(
+                        CharacterInfo::join('winterco_mumble_connector_role_corporations', 'winterco_mumble_connector_role_corporations.corporation_id', '=',
+                                            'character_infos.corporation_id')
+                                     ->select('mumble_role')
+                    )->union(
+                        CharacterInfo::join('character_info_corporation_title', 'character_infos.character_id', '=', 'character_info_corporation_title.character_info_character_id')
+                                     ->join('corporation_titles', 'character_titles.corporation_title_id', '=', 'corporation_titles.id')
+                                     ->join('winterco_mumble_connector_role_titles', function ($join) {
+                                         $join->on('winterco_mumble_connector_role_titles.corporation_id', '=', 'corporation_titles.corporation_id')
+                                              ->on('winterco_mumble_connector_role_titles.title_id', '=', 'corporation_titles.title_id');
+                                     })
+                                     ->select('mumble_role')
+                    )->union(
+                        CharacterInfo::join('winterco_mumble_connector_role_alliances', 'winterco_mumble_connector_role_alliances.alliance_id', '=',
+                                            'character_infos.alliance_id')
+                                     ->whereIn('character_infos.character_id', $mumble_user->group->users->pluck('id')->toArray())
+                                     ->select('mumble_role')
+                    )->get();
+
+        $channels = $rows->unique('mumble_role')->pluck('mumble_role')->toArray();
+
+        return $channels;
+    }
+
+    public static function checkCharacterPermission($group_id, $character_ids) {
+        $rows = Group::join('winterco_mumble_connector_role_groups', 'winterco_mumble_connector_role_groups.group_id', '=', 'groups.id')
+                    ->select('mumble_role')
+                    ->where('groups.id', $group_id)
+                    ->union(
+                        // fix model declaration calling the table directly
+                        DB::table('group_role')->join('winterco_mumble_connector_role_roles', 'winterco_mumble_connector_role_roles.role_id', '=',
+                                        'group_role.role_id')
+                                 ->where('group_role.group_id', $group_id)
+                                 ->select('mumble_role')
+                    )->union(
+                        CharacterInfo::join('winterco_mumble_connector_role_corporations', 'winterco_mumble_connector_role_corporations.corporation_id', '=',
+                                            'character_infos.corporation_id')
+                                     ->whereIn('character_infos.character_id', $character_ids)
+                                     ->select('mumble_role')
+                    )->union(
+                        CharacterInfo::join('character_info_corporation_title', 'character_infos.character_id', '=', 'character_info_corporation_title.character_info_character_id')
+                                     ->join('corporation_titles', 'character_info_corporation_title.corporation_title_id', '=', 'corporation_titles.id')
+                                     ->join('winterco_mumble_connector_role_titles', function ($join) {
+                                         $join->on('winterco_mumble_connector_role_titles.corporation_id', '=', 'corporation_titles.corporation_id')
+                                              ->on('winterco_mumble_connector_role_titles.title_id', '=', 'corporation_titles.title_id');
+                                     })
+                                     ->whereIn('character_infos.character_id', $character_ids)
+                                     ->select('mumble_role')
+                    )->union(
+                        CharacterInfo::join('winterco_mumble_connector_role_alliances', 'winterco_mumble_connector_role_alliances.alliance_id', '=',
+                                            'character_infos.alliance_id')
+                                     ->whereIn('character_infos.character_id', $character_ids)
+                                     ->select('mumble_role')
+                    )->get();
+
+        $channels = $rows->unique('mumble_role')->pluck('mumble_role')->toArray();
+
+        return $channels;
+    }
+
     /**
      * Determine all channels into which an user is allowed to be
      *
@@ -86,43 +156,19 @@ class Helper
         if (empty($enabled_character_ids))
             return $channels;
 
+        if (!in_array($mumble_user->group->main_character_id, $enabled_character_ids))
+            return $channels;
+
+        if (!Helper::checkCharacterPermission($mumble_user->group_id, [$mumble_user->group->main_character_id])){
+            return $channels;
+        }
+
         $strict_mode = setting('winterco.mumble-connector.strict', true);
         $all_token_valid = sizeof($enabled_character_ids) == $mumble_user->group->users->count();
         if ($strict_mode && ! $all_token_valid) 
             return $channels;
 
-        $rows = Group::join('winterco_mumble_connector_role_groups', 'winterco_mumble_connector_role_groups.group_id', '=', 'groups.id')
-                    ->select('mumble_role')
-                    ->where('groups.id', $mumble_user->group_id)
-                    ->union(
-                        // fix model declaration calling the table directly
-                        DB::table('group_role')->join('winterco_mumble_connector_role_roles', 'winterco_mumble_connector_role_roles.role_id', '=',
-                                        'group_role.role_id')
-                                 ->where('group_role.group_id', $mumble_user->group_id)
-                                 ->select('mumble_role')
-                    )->union(
-                        CharacterInfo::join('winterco_mumble_connector_role_corporations', 'winterco_mumble_connector_role_corporations.corporation_id', '=',
-                                            'character_infos.corporation_id')
-                                     ->whereIn('character_infos.character_id', $mumble_user->group->users->pluck('id')->toArray())
-                                     ->select('mumble_role')
-                    )->union(
-                        CharacterInfo::join('character_titles', 'character_infos.character_id', '=', 'character_titles.character_id')
-                                     ->join('winterco_mumble_connector_role_titles', function ($join) {
-                                         $join->on('winterco_mumble_connector_role_titles.corporation_id', '=',
-                                             'character_infos.corporation_id');
-                                         $join->on('winterco_mumble_connector_role_titles.title_id', '=',
-                                             'character_titles.title_id');
-                                     })
-                                     ->whereIn('character_infos.character_id', $mumble_user->group->users->pluck('id')->toArray())
-                                     ->select('mumble_role')
-                    )->union(
-                        CharacterInfo::join('winterco_mumble_connector_role_alliances', 'winterco_mumble_connector_role_alliances.alliance_id', '=',
-                                            'character_infos.alliance_id')
-                                     ->whereIn('character_infos.character_id', $mumble_user->group->users->pluck('id')->toArray())
-                                     ->select('mumble_role')
-                    )->get();
-
-        $channels = $rows->unique('mumble_role')->pluck('mumble_role')->toArray();
+        $channels = Helper::checkCharacterPermission($mumble_user->group_id, $enabled_character_ids);
 
         return $channels;
     }
@@ -181,11 +227,5 @@ class Helper
             $str .= $keyspace[random_int(0, $max)];
         }
         return $str;
-    }
-
-    public static function kickUser(int $group_id) {
-        // Redis::publish('winterco.mumble-connector.kick', $group_id);
-        // app('mumble')->kickUser($group_id);
-        return;
     }
 }

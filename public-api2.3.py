@@ -11,7 +11,7 @@ pswd = {}
 
 # TOKEN = "SjG1IWcBk6LKwmRJliJJlnXguL3IUKEq"
 
-def authenticate(groupid, password):
+async def authenticate(groupid, password):
     file = "/mumble-connector/api/authenticate"
     headers = {
         "Content-type": "application/json",
@@ -40,7 +40,7 @@ def authenticate(groupid, password):
         else:
             return sdata.get('result'), sdata.get('newname'), sdata.get('groups')
 
-def recordLogin(sessionid, groupid, ip, version, release, os, osversion):
+async def recordLogin(sessionid, groupid, ip, version, release, os, osversion):
     file = "/mumble-connector/api/login"
     headers = {
         "Content-type": "application/json",
@@ -68,7 +68,7 @@ def recordLogin(sessionid, groupid, ip, version, release, os, osversion):
         conn.close
         return None
 
-def recordLogout(sessionid, groupid):
+async def recordLogout(sessionid, groupid):
     file = "/mumble-connector/api/logout"
     headers = {
         "Content-type": "application/json",
@@ -90,6 +90,8 @@ def recordLogout(sessionid, groupid):
     else:
         conn.close
         return None
+
+async def getUserList():
 
 
 ###

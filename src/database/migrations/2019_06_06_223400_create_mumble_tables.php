@@ -172,14 +172,14 @@ class CreateMumbleTables extends Migration
      */
     public function down()
     {
-        Schema::drop('mumble_role_alliances');
-        Schema::drop('mumble_role_corporations');
-        Schema::drop('mumble_role_titles');
-        Schema::drop('mumble_role_roles');
-        Schema::drop('mumble_role_users');
-        Schema::drop('mumble_users');
-        Schema::drop('mumble_loginhistory');
-        Schema::drop('mumble_temptokens');
-        Schema::drop('mumble_logs');
+        Schema::drop('winterco_mumble_connector_role_alliances');
+        Schema::drop('winterco_mumble_connector_role_corporations');
+        Schema::drop('winterco_mumble_connector_role_titles');
+        Schema::drop('winterco_mumble_connector_role_roles');
+        Schema::drop('winterco_mumble_connector_role_users');
+        Schema::drop('winterco_mumble_connector_users');
+        Schema::drop('winterco_mumble_connector_loginhistory');
+        Schema::drop('winterco_mumble_connector_temptokens');
+        Schema::drop('winterco_mumble_connector_logs');
     }
 }

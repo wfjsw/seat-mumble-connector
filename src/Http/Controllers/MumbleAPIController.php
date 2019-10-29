@@ -5,6 +5,7 @@ namespace WinterCo\Connector\Mumble\Http\Controllers;
 use Seat\Web\Http\Controllers\Controller;
 use WinterCo\Connector\Mumble\Models\MumbleUser;
 use WinterCo\Connector\Mumble\Models\MumbleLoginHistory;
+use WinterCo\Connector\Mumble\Models\MumbleCertHash;
 use WinterCo\Connector\Mumble\Helpers\Helper;
 
 class MumbleAPIController extends Controller {
@@ -64,6 +65,11 @@ class MumbleAPIController extends Controller {
         $login_history->osversion = $osversion;
 
         $login_history->save();
+
+        MumbleLoginHistory::where('group_id', $group_id)->whereNull('logout_time')->update([
+            'logout_time' => $login_time
+        ]);
+
         return ['ok' => true];
     }
 
@@ -71,7 +77,7 @@ class MumbleAPIController extends Controller {
         $session_id = request()->input('session_id');
         $group_id = request()->input('group_id');
         $logout_time = request()->input('logout_time');
-        $login_history = MumbleLoginHistory::where('session_id', $session_id)->where('group_id', $group_id)->whereNull('logout_time')->first();
+        $login_history = MumbleLoginHistory::where('session_id', $session_id)->where('group_id', $group_id)->orderBy('login_time', 'desc')->first();
         if (is_null($login_history)) return ['ok' => false];
         $login_history->logout_time = $logout_time;
         $login_history->save();
@@ -95,5 +101,20 @@ class MumbleAPIController extends Controller {
             }
         }
         return $user_data;
+    }
+
+    public function recordFingerprint() {
+        $group_id = request()->input('group_id');
+        $cert_hash = request()->input('certhash');
+
+        $existed = MumbleCertHash::where('group_id', $group_id)->where('certhash', $cert_hash)->count();
+        if ($existed > 0) return ['ok' => true, 'unique' => false];
+
+        $fprecord = new MumbleCertHash;
+        $fprecord->group_id = $group_id;
+        $fprecord->certhash = $cert_hash;
+        $fprecord->save();
+
+        return ['ok' => true, 'unique' => true];
     }
 }

@@ -68,30 +68,23 @@ class MumbleController extends Controller
         ];
     }
 
-    public function getHistory() {
-        if (request()->ajax()) {
-            $group_id = auth()->user()->group->id;
-            $login_history = MumbleLoginHistory::where('group_id', $group_id);
-            return app('DataTables')::of($login_history)
-                ->make(true);
-        } else {
-            $server_address = setting('winterco.mumble-connector.credentials.server_addr', true);
-            if (is_null($server_address)) {
-                return redirect()->route('home')->with('error', 'Plugin is not fully configured. Please contact administrator.');
-            }
-            $group_id = auth()->user()->group->id;
-            $mumble_user = MumbleUser::findOrNew($group_id);
-            if (is_null($mumble_user->group_id)) $mumble_user->group_id = $group_id;
-            if (is_null($mumble_user->password)) {
-                $mumble_user->password = Helper::randomString(32);
-                $mumble_user->save();
-            }
-            $groups = Helper::allowedRoles($mumble_user);
-            if (sizeof($groups) == 0) {
-                return redirect()->route('home')->with('error', 'You are not allowed to use this service. Please contact administrator.');
-            }
-            return view('mumble-connector::loginhistory');
+    public function getCredentialPage() {
+        $server_address = setting('winterco.mumble-connector.credentials.server_addr', true);
+        if (is_null($server_address)) {
+            return redirect()->route('home')->with('error', 'Plugin is not fully configured. Please contact administrator.');
         }
+        $group_id = auth()->user()->group->id;
+        $mumble_user = MumbleUser::findOrNew($group_id);
+        if (is_null($mumble_user->group_id)) $mumble_user->group_id = $group_id;
+        if (is_null($mumble_user->password)) {
+            $mumble_user->password = Helper::randomString(32);
+            $mumble_user->save();
+        }
+        $groups = Helper::allowedRoles($mumble_user);
+        if (sizeof($groups) == 0) {
+            return redirect()->route('home')->with('error', 'You are not allowed to use this service. Please contact administrator.');
+        }
+        return view('mumble-connector::credentials');
     }
 
     public function resetPassword() {
@@ -100,7 +93,7 @@ class MumbleController extends Controller
         if (is_null($mumble_user->group_id)) $mumble_user->group_id = $group_id;
         $mumble_user->password = Helper::randomString(32);
         $mumble_user->save();
-        Helper::kickUser($group_id);
+        // Helper::kickUser($group_id);
         return ['ok' => true];
     }
 

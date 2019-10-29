@@ -45,7 +45,7 @@ class MumbleConnectorServiceProvider extends AbstractSeatPlugin
         $this->addPublications();
         $this->addTranslations();
 
-        $this->addMumbleContainer();
+        // $this->addMumbleContainer();
         $this->configureApi();
     }
 
@@ -123,15 +123,15 @@ class MumbleConnectorServiceProvider extends AbstractSeatPlugin
     private function addMumbleContainer()
     {
         // push ice client into container as singleton if token has been set
-        $bot_token = setting('winterco.mumble-connector.credentials.ice_endpoint_ip', true);
+        // $bot_token = setting('winterco.mumble-connector.credentials.ice_endpoint_ip', true);
 
-        if (! is_null($bot_token)) {
-            $this->app->singleton('mumble', function () {
-                return new MumbleRpc();
-            });
-        }
+        // if (! is_null($bot_token)) {
+        //     $this->app->singleton('mumble', function () {
+        //         return new MumbleRpc();
+        //     });
+        // }
 
-        $this->app->alias('mumble', MumbleRpc::class);
+        // $this->app->alias('mumble', MumbleRpc::class);
     }
 
     private function configureApi()

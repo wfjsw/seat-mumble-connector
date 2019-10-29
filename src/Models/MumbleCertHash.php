@@ -18,9 +18,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * TODO: lazy coder, remember to edit this file before TAG ! DAMMIT !
- */
-return [
-    'version'   => '1.2.0'
-];
+namespace WinterCo\Connector\Mumble\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Seat\Web\Models\Group;
+
+class MumbleCertHash extends Model
+{
+    /**
+     * @var string
+     */
+    protected $table = 'winterco_mumble_connector_certhashes';
+
+    /**
+     * @var string
+     */
+    protected $primaryKey = 'id';
+
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        'group_id', 'certhash', 
+    ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function group()
+    {
+        return $this->belongsTo(Group::class, 'group_id', 'id');
+    }
+}
